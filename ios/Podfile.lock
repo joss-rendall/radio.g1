@@ -1,0 +1,65 @@
+PODS:
+  - android_minimizer (0.0.1):
+    - Flutter
+  - Flutter (1.0.0)
+  - flutter_native_splash (0.0.1):
+    - Flutter
+  - in_app_review (2.0.0):
+    - Flutter
+  - path_provider_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
+  - radio_player (0.0.1):
+    - Flutter
+  - share_plus (0.0.1):
+    - Flutter
+  - url_launcher_ios (0.0.1):
+    - Flutter
+  - volume_regulator (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - android_minimizer (from `.symlinks/plugins/android_minimizer/ios`)
+  - Flutter (from `Flutter`)
+  - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
+  - in_app_review (from `.symlinks/plugins/in_app_review/ios`)
+  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
+  - radio_player (from `.symlinks/plugins/radio_player/ios`)
+  - share_plus (from `.symlinks/plugins/share_plus/ios`)
+  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
+  - volume_regulator (from `.symlinks/plugins/volume_regulator/ios`)
+
+EXTERNAL SOURCES:
+  android_minimizer:
+    :path: ".symlinks/plugins/android_minimizer/ios"
+  Flutter:
+    :path: Flutter
+  flutter_native_splash:
+    :path: ".symlinks/plugins/flutter_native_splash/ios"
+  in_app_review:
+    :path: ".symlinks/plugins/in_app_review/ios"
+  path_provider_foundation:
+    :path: ".symlinks/plugins/path_provider_foundation/darwin"
+  radio_player:
+    :path: ".symlinks/plugins/radio_player/ios"
+  share_plus:
+    :path: ".symlinks/plugins/share_plus/ios"
+  url_launcher_ios:
+    :path: ".symlinks/plugins/url_launcher_ios/ios"
+  volume_regulator:
+    :path: ".symlinks/plugins/volume_regulator/ios"
+
+SPEC CHECKSUMS:
+  android_minimizer: ceda9f9d3e97a31f61b3d8387b2ed743d6dc4c44
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  flutter_native_splash: edf599c81f74d093a4daf8e17bd7a018854bc778
+  in_app_review: a31b5257259646ea78e0e35fc914979b0031d011
+  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
+  radio_player: f23691d16aafc0c21dab0b3006ac29f05a22398f
+  share_plus: 8b6f8b3447e494cca5317c8c3073de39b3600d1f
+  url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
+  volume_regulator: a60233cd8fe62c67a4603380470980d2e17ebd8f
+
+PODFILE CHECKSUM: a57f30d18f102dd3ce366b1d62a55ecbef2158e5
+
+COCOAPODS: 1.16.2
