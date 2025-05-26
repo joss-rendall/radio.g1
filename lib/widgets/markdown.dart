@@ -2,12 +2,17 @@
  *  markdown.dart
  *
  *  Created by Ilia Chirkunov <contact@cheebeez.com> on January 25, 2022.
+ *  *
+ *  Modified by JossRendall, g1liberty.org, on May 2025
+ *  *
  */
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:markdown_widget/markdown_widget.dart';
 import 'package:radio_g1/language.dart';
+import 'package:radio_g1/theme.dart';
+import 'package:logging/logging.dart';
 
 /// Shows the dialog box containing the MarkdownText.
 class MarkdownDialog extends StatelessWidget {
@@ -18,17 +23,10 @@ class MarkdownDialog extends StatelessWidget {
 
   final String filename;
 
-  final TextStyle textStyle = const TextStyle(
-    fontSize: 14,
-    color: Colors.black,
-    letterSpacing: 0.0,
-    height: 1.2,
-  );
-
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: Colors.white,
+      backgroundColor: AppTheme.backgroundColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(8.0)),
       ),
@@ -40,11 +38,12 @@ class MarkdownDialog extends StatelessWidget {
           children: [
             Expanded(
               child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
                 child: Padding(
                   padding: const EdgeInsets.only(top: 14),
                   child: MarkdownText(
                     filename: filename,
-                    textStyle: textStyle,
+                    isDialog: true,
                   ),
                 ),
               ),
@@ -53,7 +52,17 @@ class MarkdownDialog extends StatelessWidget {
               children: [
                 const Spacer(),
                 TextButton(
-                  child: const Text(Language.privacyPolicyClose),
+                  child: Text(
+                    Language.privacyPolicyClose,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.lerp(
+                        FontWeight.w500,
+                        FontWeight.w700,
+                        AppTheme.fontWeight,
+                      ),
+                    ),
+                  ),
                   onPressed: () {
                     Navigator.pop(context);
                   },
@@ -72,33 +81,49 @@ class MarkdownText extends StatelessWidget {
   const MarkdownText({
     super.key,
     required this.filename,
-    this.textStyle,
+    this.isDialog = false,
   });
 
+  static final _logger = Logger('MarkdownText');
   final String filename;
-  final TextStyle? textStyle;
+  final bool isDialog;
 
   @override
   Widget build(BuildContext context) {
-    TextTheme textTheme = Theme.of(context).textTheme;
-
-    if (textStyle != null) {
-      textTheme = TextTheme(bodyMedium: textStyle);
-    }
-
     return FutureBuilder<String>(
       future: rootBundle.loadString(filename),
       builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          _logger.severe('Error loading markdown file: ${snapshot.error}');
+          return Center(
+            child: Text('Erreur de chargement: ${snapshot.error}'),
+          );
+        }
+        
         if (snapshot.hasData == true) {
-          return MarkdownBody(
-            styleSheet: MarkdownStyleSheet.fromTheme(
-              ThemeData(
-                textTheme: textTheme,
+          _logger.info('Markdown file loaded successfully: $filename');
+          return Container(
+            padding: const EdgeInsets.all(8),
+            child: DefaultTextStyle(
+              style: TextStyle(
+                fontSize: 14,
+                color: AppTheme.foregroundColor,
+                height: 1.5,
+                fontWeight: FontWeight.lerp(
+                  FontWeight.w500,
+                  FontWeight.w700,
+                  AppTheme.fontWeight,
+                ),
+              ),
+              child: MarkdownWidget(
+                data: snapshot.data!,
+                selectable: true,
+                shrinkWrap: true,
               ),
             ),
-            data: snapshot.data!,
           );
         } else {
+          _logger.info('Loading markdown file: $filename');
           return const Center(
             child: CircularProgressIndicator(),
           );

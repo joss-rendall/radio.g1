@@ -2,6 +2,9 @@
  *  about_view.dart
  *
  *  Created by Ilia Chirkunov <contact@cheebeez.com> on January 25, 2022.
+ *  *
+ *  Modified by JossRendall, g1liberty.org, on May 2025
+ *  *
  */
 
 import 'package:flutter/material.dart';
@@ -93,17 +96,6 @@ class _Description extends StatelessWidget {
       padding: const EdgeInsets.all(18),
       child: MarkdownText(
         filename: 'assets/text/about.md',
-        textStyle: TextStyle(
-          color: AppTheme.aboutUsFontColor,
-          fontSize: 14,
-          height: 1.3,
-          fontFamily: AppTheme.fontFamily,
-          fontWeight: FontWeight.lerp(
-            FontWeight.w400,
-            FontWeight.w600,
-            AppTheme.fontWeight,
-          ),
-        ),
       ),
     );
   }

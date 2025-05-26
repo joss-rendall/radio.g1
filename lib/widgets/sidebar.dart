@@ -2,6 +2,9 @@
  *  sidebar.dart
  *
  *  Created by Ilia Chirkunov <contact@cheebeez.com> on January 25, 2022.
+ *  *
+ *  Modified by JossRendall, g1liberty.org, on May 2025
+ *  *
  */
 
 import 'package:flutter/material.dart';
@@ -111,13 +114,18 @@ class Sidebar extends StatelessWidget {
         },
       ),
 
-      // Rate Us
+      // Podcasts
       _Item(
-        icon: Icons.star_outline,
-        title: Language.rateUs,
+        icon: Icons.podcasts_outlined,
+        title: Language.podcasts,
         onTap: () {
           ScaffoldController.scaffoldKey.currentState?.closeDrawer();
-          inAppReview.openStoreListing(appStoreId: Config.appStoreId);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(Language.comingSoon),
+              duration: const Duration(seconds: 2),
+            ),
+          );
         },
       ),
 

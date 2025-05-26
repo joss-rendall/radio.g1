@@ -2,6 +2,9 @@
  *  main.dart
  *
  *  Created by Ilia Chirkunov <contact@cheebeez.com> on January 25, 2022.
+ *  *
+ *  Modified by JossRendall, g1liberty.org, on May 2025
+ *  *
  */
 
 import 'package:flutter/material.dart';
@@ -12,6 +15,7 @@ import 'package:radio_g1/config.dart';
 import 'package:radio_g1/routing/route_generator.dart';
 import 'package:radio_g1/providers/app_providers.dart';
 import 'package:radio_g1/services/fcm_service.dart';
+import 'package:logging/logging.dart';
 
 void main() {
   SingleRadio.create().then(runApp);
@@ -45,6 +49,12 @@ class SingleRadio extends StatelessWidget {
   // Performs initial setup for the app.
   static Future<void> _initApp() async {
     WidgetsFlutterBinding.ensureInitialized();
+
+    // Initialize logger
+    Logger.root.level = Level.ALL;
+    Logger.root.onRecord.listen((record) {
+      debugPrint('${record.level.name}: ${record.time}: ${record.message}');
+    });
 
     // Set device orientation.
     await SystemChrome.setPreferredOrientations([

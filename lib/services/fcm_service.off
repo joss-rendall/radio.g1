@@ -2,12 +2,16 @@
  *  fcm_service.dart
  *
  *  Created by Ilia Chirkunov <contact@cheebeez.com> on January 25, 2022.
+ *  *
+ *  Modified by JossRendall, g1liberty.org, on May 2025
+ *  *
  */
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter/material.dart';
 
 late AndroidNotificationChannel channel;
 late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;

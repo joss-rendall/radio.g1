@@ -2,19 +2,23 @@
  *  config.dart
  *
  *  Created by Ilia Chirkunov <contact@cheebeez.com> on January 25, 2022.
+ *  *
+ *  Modified by JossRendall, g1liberty.org, on May 2025
+ *  *
  */
 
 class Config {
   static const title = 'Radio Ğ1 Liberty';
-  static const description = 'La première radio 100% monnaie libre';
+  static const description = '100% monnaie libre';
   static const streamUrl = 'http://radio.g1liberty.org:8100/listen/radio_june/radio.mp3';
+  static const podcastsUrl = 'http://radio.g1liberty.org:8100/public/radio_june/podcasts';
 
   // Social links
   static const instagram = '';
   static const twitter = '';
   static const facebook = '';
   static const website = '';
-  static const email = '';
+  static const email = 'g1liberty@proton.me';
 
   // Share
   static const shareSubject = 'Radio Ğ1 Liberty';

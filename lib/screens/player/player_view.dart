@@ -2,6 +2,9 @@
  *  player_view.dart
  *
  *  Created by Ilia Chirkunov <contact@cheebeez.com> on January 25, 2022.
+ *  *
+ *  Modified by JossRendall, g1liberty.org, on May 2025
+ *  *
  */
 
 import 'package:flutter/material.dart';
@@ -11,7 +14,6 @@ import 'package:radio_g1/config.dart';
 import 'package:radio_g1/theme.dart';
 import 'package:radio_g1/widgets/screen.dart';
 import 'package:radio_g1/widgets/faded_box.dart';
-import 'package:radio_g1/widgets/expanded_box.dart';
 import 'package:radio_g1/screens/player/player_viewmodel.dart';
 
 class PlayerView extends StatefulWidget {
@@ -35,20 +37,20 @@ class _PlayerViewState extends State<PlayerView> {
       hideOverscrollIndicator: true,
       child: Column(
         children: [
-          const ExpandedBox(flex: 2, minHeight: 20),
+          const SizedBox(height: 20),
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 500),
             child: _Cover(
-              key: viewModel.artwork?.key,
+              key: ValueKey(viewModel.currentTrack),
               size: MediaQuery.of(context).size.width - padding * 2,
-              image: viewModel.artwork ??
+              image: viewModel.currentArtwork ??
                   Image.asset(
                     'assets/images/cover.jpg',
                     fit: BoxFit.cover,
                   ),
             ),
           ),
-          const ExpandedBox(flex: 4, minHeight: 40),
+          const SizedBox(height: 40),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -64,7 +66,7 @@ class _PlayerViewState extends State<PlayerView> {
               ),
             ],
           ),
-          const ExpandedBox(flex: 1, minHeight: 10),
+          const SizedBox(height: 10),
           Slider(
             value: viewModel.volume,
             min: 0,
@@ -73,7 +75,7 @@ class _PlayerViewState extends State<PlayerView> {
             label: viewModel.volume.round().toString(),
             onChanged: viewModel.setVolume,
           ),
-          const ExpandedBox(flex: 1, minHeight: 10),
+          const SizedBox(height: 10),
           const SizedBox(height: 10),
         ],
       ),
@@ -122,8 +124,8 @@ class _Title extends StatelessWidget {
     required this.track,
   });
 
-  final String artist;
-  final String track;
+  final String? artist;
+  final String? track;
 
   @override
   Widget build(BuildContext context) {
@@ -141,9 +143,10 @@ class _Title extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            if (Config.textScrolling)
             TextScroll(
-              artist,
-              numberOfReps: Config.textScrolling ? null : 0,
+                artist ?? Config.title,
+                numberOfReps: null,
               intervalSpaces: 7,
               velocity: const Velocity(pixelsPerSecond: Offset(30, 0)),
               delayBefore: const Duration(seconds: 1),
@@ -157,10 +160,24 @@ class _Title extends StatelessWidget {
                   AppTheme.fontWeight,
                 ),
               ),
+              )
+            else
+              Text(
+                artist ?? Config.title,
+                style: TextStyle(
+                  fontSize: 24,
+                  color: AppTheme.artistFontColor,
+                  fontWeight: FontWeight.lerp(
+                    FontWeight.w700,
+                    FontWeight.w800,
+                    AppTheme.fontWeight,
+                  ),
+                ),
             ),
+            if (Config.textScrolling)
             TextScroll(
-              track,
-              numberOfReps: Config.textScrolling ? null : 0,
+                track ?? '',
+                numberOfReps: null,
               intervalSpaces: 10,
               velocity: const Velocity(pixelsPerSecond: Offset(40, 0)),
               delayBefore: const Duration(seconds: 1),
@@ -174,6 +191,19 @@ class _Title extends StatelessWidget {
                   AppTheme.fontWeight,
                 ),
               ),
+              )
+            else
+              Text(
+                track ?? '',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: AppTheme.trackFontColor,
+                  fontWeight: FontWeight.lerp(
+                    FontWeight.w700,
+                    FontWeight.w800,
+                    AppTheme.fontWeight,
+                  ),
+                ),
             ),
           ],
         ),

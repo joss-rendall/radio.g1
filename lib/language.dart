@@ -2,6 +2,9 @@
  *  language.dart
  *
  *  Created by Ilia Chirkunov <contact@cheebeez.com> on January 25, 2022.
+ *  *
+ *  Modified by JossRendall, g1liberty.org, on May 2025
+ *  *
  */
 
 class Language {
@@ -28,7 +31,8 @@ class Language {
   static const facebook = 'Facebook';
   static const website = 'Site web';
   static const email = 'E-mail';
-  static const rateUs = 'Évaluez-nous';
+  static const podcasts = 'Podcasts';
+  static const comingSoon = 'Bientôt disponible';
   static const privacyPolicy = 'Politique de confidentialité';
   static const privacyPolicyClose = 'Fermer';
   static const share = 'Partager';

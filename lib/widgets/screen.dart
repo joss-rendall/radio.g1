@@ -2,10 +2,12 @@
  *  screen.dart
  *
  *  Created by Ilia Chirkunov <contact@cheebeez.com> on January 25, 2022.
+ *  *
+ *  Modified by JossRendall, g1liberty.org, on May 2025
+ *  *
  */
 
 import 'package:flutter/material.dart';
-import 'package:android_minimizer/android_minimizer.dart';
 import 'package:radio_g1/services/admob_service.dart';
 import 'package:radio_g1/theme.dart';
 import 'package:radio_g1/widgets/sidebar.dart';
@@ -43,9 +45,7 @@ class _ScreenState extends State<Screen> {
       horizontal: MediaQuery.of(context).size.width * 0.08,
     );
 
-    return AndroidMinimizer(
-      minimize: widget.home ? true : false,
-      child: BackgroundImage(
+    return BackgroundImage(
         enable: widget.backgroundImage,
         child: Scaffold(
           key: widget.home ? ScaffoldController.scaffoldKey : null,
@@ -65,19 +65,17 @@ class _ScreenState extends State<Screen> {
           body: ExpandedScrollView(
             hideOverscrollIndicator: widget.hideOverscrollIndicator,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Expanded(
-                  child: Padding(
+                Padding(
                     padding: widget.padding ?? defaultPadding,
                     child: widget.child,
-                  ),
                 ),
                 if (widget.home && AdmobService.isEnabled)
                   ScaffoldController.isDrawerOpened
                       ? const BottomBannerStub()
                       : const BottomBanner(),
               ],
-            ),
           ),
         ),
       ),

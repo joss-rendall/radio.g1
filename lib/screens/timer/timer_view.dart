@@ -2,6 +2,9 @@
  *  timer_view.dart
  *
  *  Created by Ilia Chirkunov <contact@cheebeez.com> on January 25, 2022.
+ *  *
+ *  Modified by JossRendall, g1liberty.org, on May 2025
+ *  *
  */
 
 import 'package:flutter/material.dart';
@@ -11,7 +14,6 @@ import 'package:radio_g1/theme.dart';
 import 'package:radio_g1/language.dart';
 import 'package:radio_g1/extensions/duration_extension.dart';
 import 'package:radio_g1/widgets/screen.dart';
-import 'package:radio_g1/widgets/expanded_box.dart';
 import 'package:radio_g1/screens/timer/timer_viewmodel.dart';
 
 class TimerView extends StatefulWidget {
@@ -34,9 +36,9 @@ class _TimerViewState extends State<TimerView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const ExpandedBox(minHeight: 30),
+            const SizedBox(height: 30),
             const _CircularSlider(),
-            const ExpandedBox(minHeight: 30),
+            const SizedBox(height: 30),
             viewModel.timer?.isActive ?? false
                 ? _Button(
                     title: Language.stopTimer,
@@ -50,7 +52,7 @@ class _TimerViewState extends State<TimerView> {
                     textColor: AppTheme.timerButtonFontColor,
                     onTap: viewModel.startTimer,
                   ),
-            const ExpandedBox(minHeight: 30),
+            const SizedBox(height: 30),
           ],
         ),
       ),
