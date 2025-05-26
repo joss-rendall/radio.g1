@@ -14,10 +14,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:radio_g1/config.dart';
 import 'package:radio_g1/theme.dart';
 import 'package:radio_g1/language.dart';
-import 'package:radio_g1/widgets/markdown.dart';
 import 'package:radio_g1/screens/about/about_view.dart';
 import 'package:radio_g1/screens/timer/timer_view.dart';
 import 'package:radio_g1/controllers/scaffold_controller.dart';
+import 'package:radio_g1/screens/support/support_view.dart';
 
 class Sidebar extends StatelessWidget {
   Sidebar({super.key});
@@ -129,44 +129,15 @@ class Sidebar extends StatelessWidget {
         },
       ),
 
-      // Privacy Policy
+      // Support
       _Item(
-        icon: Icons.description_outlined,
-        title: Language.privacyPolicy,
+        icon: Icons.favorite_outline,
+        title: Language.support,
         onTap: () {
           ScaffoldController.scaffoldKey.currentState?.closeDrawer();
-
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return const MarkdownDialog(
-                filename: 'assets/text/privacy_policy.md',
-              );
-            },
-          );
+          Navigator.pushNamed(context, SupportView.routeName);
         },
       ),
-
-      // Share - Temporairement désactivé
-      /*
-      _Item(
-        icon: Icons.share_outlined,
-        title: Language.share,
-        onTap: () {
-          ScaffoldController.scaffoldKey.currentState?.closeDrawer();
-
-          // Required for iPad.
-          final box = context.findRenderObject() as RenderBox?;
-          final sharePosition = box!.localToGlobal(Offset.zero) & box.size;
-
-          Share.share(
-            Config.shareText,
-            subject: Config.shareSubject,
-            sharePositionOrigin: sharePosition,
-          );
-        },
-      ),
-      */
 
       // About Us
       _Item(

@@ -7,7 +7,41 @@
  *  *
  */
 
+import 'package:flutter/material.dart';
+
 class Language {
+  static const Map<String, Map<String, String>> _localizedValues = {
+    'en': {
+      'about': 'About',
+      'support': 'Support us',
+      'howToSupport': 'How to ?',
+      'privacy': 'Privacy Policy',
+      'settings': 'Settings',
+      'language': 'Language',
+      'volume': 'Volume',
+      'autoplay': 'Autoplay',
+      'english': 'English',
+      'french': 'French',
+    },
+    'fr': {
+      'about': 'À propos',
+      'support': 'Nous soutenir',
+      'howToSupport': 'Comment ?',
+      'privacy': 'Politique de confidentialité',
+      'settings': 'Paramètres',
+      'language': 'Langue',
+      'volume': 'Volume',
+      'autoplay': 'Lecture automatique',
+      'english': 'Anglais',
+      'french': 'Français',
+    },
+  };
+
+  static String of(BuildContext context, String key) {
+    final locale = Localizations.localeOf(context).languageCode;
+    return _localizedValues[locale]?[key] ?? _localizedValues['en']![key]!;
+  }
+
   // Salutations
   static const goodMorning = 'Bonjour';
   static const goodAfternoon = 'Bon après-midi';
@@ -21,6 +55,8 @@ class Language {
 
   // À propos
   static const aboutUs = 'À propos';
+  static const support = 'Nous soutenir';
+  static const howToSupport = 'Comment nous soutenir';
   static const profile = 'Profil';
   static const description = 'Description';
 

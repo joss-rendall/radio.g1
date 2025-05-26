@@ -33,19 +33,19 @@ class RadioAudioService {
     _isInitializing = true;
     try {
       _logger.info('Initializing RadioAudioService');
-      _audioPlayer = AudioPlayer();
-      _audioHandler = await AudioService.init(
-        builder: () => RadioAudioHandler(_audioPlayer),
-        config: const AudioServiceConfig(
-          androidNotificationChannelId: 'com.cheebeez.single_radio.audio',
-          androidNotificationChannelName: 'Radio Ğ1 Liberty',
-          androidNotificationOngoing: true,
-          androidStopForegroundOnPause: true,
-        ),
-      );
+    _audioPlayer = AudioPlayer();
+    _audioHandler = await AudioService.init(
+      builder: () => RadioAudioHandler(_audioPlayer),
+      config: const AudioServiceConfig(
+        androidNotificationChannelId: 'com.cheebeez.single_radio.audio',
+        androidNotificationChannelName: 'Radio Ğ1 Liberty',
+        androidNotificationOngoing: true,
+        androidStopForegroundOnPause: true,
+      ),
+    );
 
-      await _audioPlayer.setUrl(Config.streamUrl);
-      _isInitialized = true;
+    await _audioPlayer.setUrl(Config.streamUrl);
+    _isInitialized = true;
       _logger.info('RadioAudioService initialized successfully');
     } catch (e) {
       _logger.severe('Error initializing RadioAudioService: $e');

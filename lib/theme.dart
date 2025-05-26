@@ -15,7 +15,7 @@ class AppTheme {
   static const headerColor = Color(0xFF141C27);
   static const foregroundColor = Color(0xFFFFFFFF);
   static const backgroundColor = Color(0xFF172230);
-  static const accentColor = Color(0xFFDF47D7);
+  static const accentColor = Color(0xFFF1B129);
 
   // Constants for detailed customization.
   static const backgroundImage = false;

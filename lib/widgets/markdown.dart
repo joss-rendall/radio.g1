@@ -113,8 +113,8 @@ class MarkdownText extends StatelessWidget {
                   FontWeight.w500,
                   FontWeight.w700,
                   AppTheme.fontWeight,
-                ),
               ),
+            ),
               child: MarkdownWidget(
                 data: snapshot.data!,
                 selectable: true,

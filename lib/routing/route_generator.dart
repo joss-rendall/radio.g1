@@ -9,6 +9,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:radio_g1/screens/screens.dart';
+import 'package:radio_g1/screens/support/support_view.dart';
 
 class RouteGenerator {
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
@@ -20,6 +21,10 @@ class RouteGenerator {
       case AboutView.routeName:
         return MaterialPageRoute(
           builder: (context) => const AboutView(),
+        );
+      case SupportView.routeName:
+        return MaterialPageRoute(
+          builder: (context) => const SupportView(),
         );
       case TimerView.routeName:
         return MaterialPageRoute(
