@@ -63,3 +63,7 @@ node_modules/
 
 # Fichiers volumineux
 commandlinetools-linux-9477386_latest.zip
+
+# Keystore files
+android/key.properties
+android/app/keystore/
