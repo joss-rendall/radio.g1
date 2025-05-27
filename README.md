@@ -2,6 +2,12 @@
 
 Application mobile officielle de Radio G1 Liberty, la radio 100% monnaie libre.
 
+Choix de Flutter pour le développement multiplateforme :
+- Permet de créer une application native pour Android, Web et iOS à partir d'une seule base de code
+- Large écosystème de packages et une communauté active
+
+> **Note :** Les releases seront principalement pour Android afin de rester dans l'esprit de la license AGPL-3.0. En effet, Android étant un système d'exploitation open source basé sur Linux, il correspond mieux à notre philosophie de logiciel libre. iOS et le Web seront supportés mais ne seront pas notre priorité de développement.
+
 ## 📱 Fonctionnalités
 
 - Écoute en direct de Radio G1 Liberty
