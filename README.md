@@ -28,7 +28,13 @@ Les contributions sont les bienvenues ! N'hésitez pas à :
 
 ## 📄 Licence
 
-Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
+Ce projet est sous licence [AGPL-3.0](LICENSE) (GNU Affero General Public License v3.0).
+
+Cette licence garantit que :
+- Le code reste libre et open source
+- Toute modification doit être partagée sous la même licence
+- Les utilisateurs ont le droit d'utiliser, modifier et distribuer le code
+- La licence est compatible avec la monnaie libre Ğ1
 
 ## 📞 Support
 
