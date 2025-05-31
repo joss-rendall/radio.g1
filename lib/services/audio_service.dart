@@ -78,11 +78,15 @@ class RadioAudioService {
   Stream<Duration?> get bufferedPositionStream => _audioPlayer.bufferedPositionStream;
   Stream<double?> get speedStream => _audioPlayer.speedStream;
   Stream<double?> get volumeStream => _audioPlayer.volumeStream;
+  Stream<MediaItem?> get mediaItemStream => _audioHandler.mediaItem;
 }
 
 class RadioAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
   final AudioPlayer _player;
   final _logger = Logger('RadioAudioHandler');
+  String? _currentArtist;
+  String? _currentTitle;
+  String? _currentCover;
 
   RadioAudioHandler(this._player) {
     _loadPlaylist();
@@ -90,6 +94,7 @@ class RadioAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler 
     _listenForDurationChanges();
     _listenForCurrentSongIndexChanges();
     _listenForSequenceStateChanges();
+    _listenForMetadataChanges();
   }
 
   Future<void> _loadPlaylist() async {
@@ -174,6 +179,28 @@ class RadioAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler 
             artist: "Radio Ğ1 Liberty",
           )).toList();
       this.queue.add(items);
+    });
+  }
+
+  void _listenForMetadataChanges() {
+    _player.icyMetadataStream.listen((IcyMetadata? metadata) {
+      if (metadata != null) {
+        final streamTitle = metadata.info?.title;
+        if (streamTitle != null) {
+          final parts = streamTitle.split(' - ');
+          _currentArtist = parts.isNotEmpty ? parts[0] : null;
+          _currentTitle = parts.length > 1 ? parts[1] : null;
+        }
+        _currentCover = metadata.info?.url;
+        
+        mediaItem.add(MediaItem(
+          id: 'radio_g1',
+          album: "Radio Ğ1 Liberty",
+          title: _currentTitle ?? Config.title,
+          artist: _currentArtist ?? "Radio Ğ1 Liberty",
+          artUri: _currentCover != null && _currentCover!.isNotEmpty ? Uri.parse(_currentCover!) : null,
+        ));
+      }
     });
   }
 

@@ -30,6 +30,10 @@ class _PlayerViewState extends State<PlayerView> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final topPadding = screenHeight * 0.08; // Augmenté de 5% à 8%
+    final coverToInfoSpacing = screenHeight * 0.15; // Augmenté de 4% à 6%
+
     return Screen(
       title: Config.title,
       home: true,
@@ -37,7 +41,7 @@ class _PlayerViewState extends State<PlayerView> {
       hideOverscrollIndicator: true,
       child: Column(
         children: [
-          const SizedBox(height: 20),
+          SizedBox(height: topPadding),
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 500),
             child: _Cover(
@@ -50,7 +54,7 @@ class _PlayerViewState extends State<PlayerView> {
                   ),
             ),
           ),
-          const SizedBox(height: 40),
+          SizedBox(height: coverToInfoSpacing),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -75,7 +79,6 @@ class _PlayerViewState extends State<PlayerView> {
             label: viewModel.volume.round().toString(),
             onChanged: viewModel.setVolume,
           ),
-          const SizedBox(height: 10),
           const SizedBox(height: 10),
         ],
       ),
@@ -144,22 +147,22 @@ class _Title extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (Config.textScrolling)
-            TextScroll(
+              TextScroll(
                 artist ?? Config.title,
                 numberOfReps: null,
-              intervalSpaces: 7,
-              velocity: const Velocity(pixelsPerSecond: Offset(30, 0)),
-              delayBefore: const Duration(seconds: 1),
-              pauseBetween: const Duration(seconds: 2),
-              style: TextStyle(
-                fontSize: 24,
-                color: AppTheme.artistFontColor,
-                fontWeight: FontWeight.lerp(
-                  FontWeight.w700,
-                  FontWeight.w800,
-                  AppTheme.fontWeight,
+                intervalSpaces: 7,
+                velocity: const Velocity(pixelsPerSecond: Offset(30, 0)),
+                delayBefore: const Duration(seconds: 1),
+                pauseBetween: const Duration(seconds: 2),
+                style: TextStyle(
+                  fontSize: 24,
+                  color: AppTheme.artistFontColor,
+                  fontWeight: FontWeight.lerp(
+                    FontWeight.w700,
+                    FontWeight.w800,
+                    AppTheme.fontWeight,
+                  ),
                 ),
-              ),
               )
             else
               Text(
@@ -173,24 +176,24 @@ class _Title extends StatelessWidget {
                     AppTheme.fontWeight,
                   ),
                 ),
-            ),
+              ),
             if (Config.textScrolling)
-            TextScroll(
+              TextScroll(
                 track ?? '',
                 numberOfReps: null,
-              intervalSpaces: 10,
-              velocity: const Velocity(pixelsPerSecond: Offset(40, 0)),
-              delayBefore: const Duration(seconds: 1),
-              pauseBetween: const Duration(seconds: 2),
-              style: TextStyle(
-                fontSize: 16,
-                color: AppTheme.trackFontColor,
-                fontWeight: FontWeight.lerp(
-                  FontWeight.w700,
-                  FontWeight.w800,
-                  AppTheme.fontWeight,
+                intervalSpaces: 10,
+                velocity: const Velocity(pixelsPerSecond: Offset(40, 0)),
+                delayBefore: const Duration(seconds: 1),
+                pauseBetween: const Duration(seconds: 2),
+                style: TextStyle(
+                  fontSize: 16,
+                  color: AppTheme.trackFontColor,
+                  fontWeight: FontWeight.lerp(
+                    FontWeight.w700,
+                    FontWeight.w800,
+                    AppTheme.fontWeight,
+                  ),
                 ),
-              ),
               )
             else
               Text(
@@ -204,7 +207,7 @@ class _Title extends StatelessWidget {
                     AppTheme.fontWeight,
                   ),
                 ),
-            ),
+              ),
           ],
         ),
       ),
