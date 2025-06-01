@@ -1,7 +1,7 @@
 name: radio_g1
 description: Radio Ğ1 Liberty
 publish_to: 'none'
-version: 0.1.0-beta.1+1
+version: 0.1.0-beta.3+3
 
 environment:
   sdk: ^3.5.3
@@ -23,6 +23,8 @@ dependencies:
   volume_regulator: 2.4.1
   dart_common_utils: 1.0.0
   logging: ^1.2.0
+  cupertino_icons: ^1.0.2
+  package_info_plus: ^8.3.0
 
 dev_dependencies:
   flutter_lints: 5.0.0

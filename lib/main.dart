@@ -16,8 +16,16 @@ import 'package:radio_g1/routing/route_generator.dart';
 import 'package:radio_g1/providers/app_providers.dart';
 import 'package:radio_g1/services/fcm_service.dart';
 import 'package:logging/logging.dart';
+import 'package:radio_g1/services/update_service.dart';
+import 'package:radio_g1/screens/player/player_view.dart';
 
 void main() {
+  // Configuration du logger
+  Logger.root.level = Level.ALL;
+  Logger.root.onRecord.listen((record) {
+    debugPrint('${record.level.name}: ${record.time}: ${record.message}');
+  });
+
   SingleRadio.create().then(runApp);
 }
 
@@ -34,6 +42,7 @@ class SingleRadio extends StatelessWidget {
         title: Config.title,
         theme: AppTheme.themeData,
         onGenerateRoute: RouteGenerator.onGenerateRoute,
+        home: const HomeWrapper(),
       ),
     );
   }
@@ -50,12 +59,6 @@ class SingleRadio extends StatelessWidget {
   static Future<void> _initApp() async {
     WidgetsFlutterBinding.ensureInitialized();
 
-    // Initialize logger
-    Logger.root.level = Level.ALL;
-    Logger.root.onRecord.listen((record) {
-      debugPrint('${record.level.name}: ${record.time}: ${record.message}');
-    });
-
     // Set device orientation.
     await SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -65,5 +68,29 @@ class SingleRadio extends StatelessWidget {
   // Initializes key services like Firebase and KeyValue.
   static Future<void> _initServices() async {
     await FcmService.init();
+  }
+}
+
+class HomeWrapper extends StatefulWidget {
+  const HomeWrapper({super.key});
+  @override
+  State<HomeWrapper> createState() => _HomeWrapperState();
+}
+
+class _HomeWrapperState extends State<HomeWrapper> {
+  bool _checkedForUpdates = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_checkedForUpdates) {
+      _checkedForUpdates = true;
+      UpdateService().checkForUpdates(context);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return const PlayerView();
   }
 }

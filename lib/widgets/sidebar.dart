@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:radio_g1/config.dart';
 import 'package:radio_g1/theme.dart';
 import 'package:radio_g1/language.dart';
@@ -32,6 +33,7 @@ class Sidebar extends StatelessWidget {
         children: [
           const _Header(),
           ..._buildItems(context),
+          const _VersionFooter(),
         ],
       ),
     );
@@ -265,5 +267,31 @@ class _Item extends StatelessWidget {
             onTap: onTap,
           )
         : const SizedBox.shrink();
+  }
+}
+
+class _VersionFooter extends StatelessWidget {
+  const _VersionFooter();
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<PackageInfo>(
+      future: PackageInfo.fromPlatform(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return const SizedBox.shrink();
+        
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            'v${snapshot.data!.version}',
+            style: TextStyle(
+              color: AppTheme.drawerDescriptionFontColor,
+              fontSize: 12,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        );
+      },
+    );
   }
 }

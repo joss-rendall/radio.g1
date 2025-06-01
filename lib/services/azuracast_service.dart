@@ -1,25 +1,55 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:logging/logging.dart';
+
+class Metadata {
+  final String title;
+  final String artist;
+  final String album;
+  final String genre;
+  final String art;
+  final int duration;    // Durée totale en secondes
+  final int elapsed;     // Temps écoulé en secondes
+  final int remaining;   // Temps restant en secondes
+
+  Metadata({
+    required this.title,
+    required this.artist,
+    required this.album,
+    required this.genre,
+    required this.art,
+    required this.duration,
+    required this.elapsed,
+    required this.remaining,
+  });
+
+  @override
+  String toString() {
+    return 'Metadata{title: $title, artist: $artist, album: $album, genre: $genre, art: $art, duration: $duration, elapsed: $elapsed, remaining: $remaining}';
+  }
+}
 
 class AzuracastService {
   static const String _baseUrl = 'http://radio.g1liberty.org:8100';
   static const String _stationId = 'radio_june';
-  final _metadataController = StreamController<Map<String, dynamic>>.broadcast();
+  final _metadataController = StreamController<Metadata>.broadcast();
+  final _logger = Logger('AzuracastService');
   Timer? _pollingTimer;
   String? _lastTitle;
   String? _lastArtist;
 
-  Stream<Map<String, dynamic>> get metadataStream => _metadataController.stream;
+  AzuracastService() {
+    _logger.info('Initialisation du service Azuracast');
+  }
+
+  Stream<Metadata> get metadataStream => _metadataController.stream;
 
   Future<void> startListening() async {
-    print('Démarrage de l\'écoute des métadonnées...');
+    _logger.info('Démarrage de l\'écoute des métadonnées...');
     _pollingTimer?.cancel();
     
-    // Première requête immédiate
     await _fetchMetadata();
-    
-    // Puis polling toutes les 5 secondes
     _pollingTimer = Timer.periodic(const Duration(seconds: 5), (_) async {
       await _fetchMetadata();
     });
@@ -27,43 +57,57 @@ class AzuracastService {
 
   Future<void> _fetchMetadata() async {
     try {
-      print('Récupération des métadonnées...');
+      _logger.fine('Récupération des métadonnées...');
       final response = await http.get(Uri.parse('$_baseUrl/api/nowplaying/$_stationId'));
       
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        if (data['now_playing'] != null && data['now_playing']['song'] != null) {
-          final song = data['now_playing']['song'];
-          final title = song['title'] ?? '';
-          final artist = song['artist'] ?? '';
-          
-          // Ne mettre à jour que si les données ont changé
-          if (title != _lastTitle || artist != _lastArtist) {
-            print('Nouvelles métadonnées détectées');
-            _lastTitle = title;
-            _lastArtist = artist;
-            
-            final metadata = {
-              'artist': artist,
-              'title': title,
-              'art': song['art'] ?? '',
-              'album': song['album'] ?? '',
-              'genre': song['genre'] ?? '',
-            };
-            print('Métadonnées: $metadata');
-            _metadataController.add(metadata);
-          }
+        final metadata = _parseMetadata(data);
+        
+        if (metadata.title != _lastTitle || metadata.artist != _lastArtist) {
+          _logger.info('Nouvelles métadonnées détectées: $metadata');
+          _lastTitle = metadata.title;
+          _lastArtist = metadata.artist;
+          _metadataController.add(metadata);
         }
       } else {
-        print('Erreur lors de la récupération des métadonnées: ${response.statusCode}');
+        _logger.warning('Erreur HTTP: ${response.statusCode}');
       }
     } catch (e) {
-      print('Erreur lors de la récupération des métadonnées: $e');
+      _logger.severe('Erreur lors de la récupération des métadonnées', e);
+    }
+  }
+
+  Metadata _parseMetadata(Map<String, dynamic> data) {
+    try {
+      final nowPlaying = data['now_playing'];
+      if (nowPlaying == null) {
+        throw Exception('Données de lecture manquantes');
+      }
+
+      final song = nowPlaying['song'];
+      if (song == null) {
+        throw Exception('Informations sur la chanson manquantes');
+      }
+
+      return Metadata(
+        title: song['title'] ?? 'Titre inconnu',
+        artist: song['artist'] ?? 'Artiste inconnu',
+        album: song['album'] ?? 'Album inconnu',
+        genre: song['genre'] ?? 'Genre inconnu',
+        art: song['art'] ?? '',
+        duration: nowPlaying['duration'] ?? 0,
+        elapsed: nowPlaying['elapsed'] ?? 0,
+        remaining: nowPlaying['remaining'] ?? 0,
+      );
+    } catch (e) {
+      _logger.severe('Erreur lors du parsing des métadonnées', e);
+      rethrow;
     }
   }
 
   void dispose() {
-    print('Arrêt du service Azuracast');
+    _logger.info('Arrêt du service Azuracast');
     _pollingTimer?.cancel();
     _metadataController.close();
   }

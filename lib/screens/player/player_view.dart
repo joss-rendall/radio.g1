@@ -15,6 +15,7 @@ import 'package:radio_g1/theme.dart';
 import 'package:radio_g1/widgets/screen.dart';
 import 'package:radio_g1/widgets/faded_box.dart';
 import 'package:radio_g1/screens/player/player_viewmodel.dart';
+import 'dart:math';
 
 class PlayerView extends StatefulWidget {
   const PlayerView({super.key});
@@ -24,9 +25,81 @@ class PlayerView extends StatefulWidget {
   State<PlayerView> createState() => _PlayerViewState();
 }
 
-class _PlayerViewState extends State<PlayerView> {
+class _PlayerViewState extends State<PlayerView> with SingleTickerProviderStateMixin {
   late final viewModel = Provider.of<PlayerViewModel>(context, listen: true);
+  late final AnimationController _controller;
+  final _random = Random();
   double get padding => MediaQuery.of(context).size.width * 0.08;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 2000),
+      vsync: this,
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  Widget _buildSquigglyWave(BuildContext context) {
+    return SizedBox(
+      height: 20,
+      child: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          return CustomPaint(
+            size: Size(MediaQuery.of(context).size.width - 40, 50),
+            painter: SquigglyWavePainter(
+              progress: _controller.value,
+              color: Colors.white,
+              random: _random,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildInfoSection(BuildContext context, PlayerViewModel viewModel) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Visualiseur audio
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: _buildSquigglyWave(context),
+        ),
+        // Temps écoulé et durée totale
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                viewModel.formatDuration(viewModel.elapsed),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                ),
+              ),
+              Text(
+                viewModel.formatDuration(viewModel.duration),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,8 +132,8 @@ class _PlayerViewState extends State<PlayerView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _Title(
-                artist: viewModel.artist,
-                track: viewModel.track,
+                artist: viewModel.currentArtist,
+                track: viewModel.currentTitle,
               ),
               const SizedBox(width: 20),
               _ControlButton(
@@ -71,6 +144,7 @@ class _PlayerViewState extends State<PlayerView> {
             ],
           ),
           const SizedBox(height: 10),
+          _buildInfoSection(context, viewModel),
           Slider(
             value: viewModel.volume,
             min: 0,
@@ -247,5 +321,59 @@ class _ControlButton extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class SquigglyWavePainter extends CustomPainter {
+  final double progress;
+  final Color color;
+  final Random random;
+
+  SquigglyWavePainter({
+    required this.progress,
+    required this.color,
+    required this.random,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.0;
+
+    final path = Path();
+    final width = size.width;
+    final height = size.height;
+    final midHeight = height / 2;
+    final maxAmplitude = height * 0.4; // 80% de la hauteur totale (40% de chaque côté)
+
+    // Début du tracé à droite
+    path.moveTo(width, midHeight);
+
+    // Génération de l'onde avec des variations aléatoires
+    for (double x = width; x >= 0; x -= 1) { // Réduit l'espacement pour plus de détails
+      // Amplitude de base
+      double amplitude = maxAmplitude * 0.5; // 50% de l'amplitude maximale
+      
+      // Ajout de variations aléatoires pour simuler la musique
+      if (random.nextDouble() < 0.3) { // 30% de chance d'avoir un pic
+        amplitude *= random.nextDouble() * 2.0; // Pic aléatoire jusqu'à 2x l'amplitude
+      }
+      
+      // Ajout d'une composante sinusoïdale pour la fluidité avec une fréquence plus élevée
+      final y = midHeight + 
+                sin((x / width * 16 * pi) + (progress * 8 * pi)) * amplitude + // Doublé la fréquence
+                (random.nextDouble() - 0.5) * (maxAmplitude * 0.3); // Augmenté le bruit à 30%
+      
+      path.lineTo(x, y);
+    }
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(SquigglyWavePainter oldDelegate) {
+    return oldDelegate.progress != progress;
   }
 }

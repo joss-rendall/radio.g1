@@ -51,4 +51,9 @@ class Config {
   static const titleTag = '';
   static const titleSeparator = ' - ';
   static const timerPeriod = 2;
+
+  // New fields from the code block
+  static const gitRepositoryUrl = 'https://github.com/g1liberty/radio.g1_APK_Canyon';
+  static const releasesUrl = 'https://api.github.com/repos/g1liberty/radio.g1_APK_Canyon/releases';
+  static const apkDownloadUrl = 'https://github.com/g1liberty/radio.g1_APK_Canyon/releases/download/';
 }
